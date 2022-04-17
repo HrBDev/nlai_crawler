@@ -4,4 +4,4 @@ lxml
 pymongo
 dnspython
 python-dotenv
-
+joblib
