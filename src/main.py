@@ -43,6 +43,6 @@ def scrape(i):
 
 
 if __name__ == '__main__':
-    opac_nlai_write_to_json(1, 7265830)
+    opac_nlai_write_to_json(1, 363291)
     upload_to_transfersh = "curl --upload-file ./dataset.json https://transfer.sh/dataset.json"
     os.system(upload_to_transfersh)
