@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+import os
 
 import requests
 from bs4 import BeautifulSoup
@@ -36,7 +37,7 @@ def opac_nlai_write_to_json(range_start, range_end):
     results = Parallel(n_jobs=8)(delayed(scrape)(i) for i in range(range_start, range_end))
     results_as_dict = {}
     preceding_text = 1
-    with open(f"dataset1.json", 'w', encoding='utf-8') as outfile:
+    with open(f"dataset.json", 'w', encoding='utf-8') as outfile:
         for i in range(len(results)):
             results_as_dict[str(preceding_text)] = results[i]
             preceding_text += 1
@@ -91,3 +92,5 @@ def libs_nlai():
 
 if __name__ == '__main__':
     opac_nlai_write_to_json(1, 7265830)
+    upload_to_transfersh = "curl --upload-file ./dataset.json https://transfer.sh/dataset.json"
+    os.system(upload_to_transfersh)
