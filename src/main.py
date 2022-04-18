@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from joblib import Parallel, delayed
 
-from src.settings import target_collection
+from settings import target_collection
 
 
 def opac_nlai():
