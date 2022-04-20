@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from os.path import exists as file_exists
 
 import requests
 from bs4 import BeautifulSoup
@@ -32,19 +33,17 @@ def opac_nlai():
         target_collection.insert_one(schema)
 
 
-def opac_nlai_write_to_json(range_start, range_end):
-    results = Parallel(n_jobs=8)(delayed(scrape)(i) for i in range(range_start, range_end))
+def write_range_to_json(range_start, range_end, base_url):
+    results = Parallel(n_jobs=8)(delayed(scrape)(f"{base_url}{k}") for k in range(range_start, range_end))
     results_as_dict = {}
-    preceding_text = 1
-    with open(f"dataset1.json", 'w', encoding='utf-8') as outfile:
-        for i in range(len(results)):
-            results_as_dict[str(preceding_text)] = results[i]
-            preceding_text += 1
+    with open(f"./data/{range_start}-{range_end}.json", 'w', encoding='utf-8') as outfile:
+        for j in range(len(results)):
+            results_as_dict[str(j + range_start)] = results[j]
         json.dump(results_as_dict, outfile, indent=4, ensure_ascii=False)
+        outfile.close()
 
 
-def scrape(i):
-    url = f"http://opac.nlai.ir/opac-prod/bibliographic/{i}"
+def scrape(url):
     print(url)
     response = requests.get(url)
     soup = BeautifulSoup(response.content, features="lxml")
@@ -90,4 +89,6 @@ def libs_nlai():
 
 
 if __name__ == '__main__':
-    opac_nlai_write_to_json(1, 7265830)
+    for i in range(1, 7265830, 100):
+        if not file_exists(f"./data/{i}-{i + 100}.json"):
+            write_range_to_json(i, i + 100, "http://opac.nlai.ir/opac-prod/bibliographic/")
