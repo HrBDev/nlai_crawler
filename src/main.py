@@ -91,4 +91,4 @@ def libs_nlai():
 if __name__ == '__main__':
     for i in range(1, 7265830, 100):
         if not file_exists(f"./data/{i}-{i + 100}.json"):
-            write_range_to_json(i, i + 100, "http://opac.nlai.ir/opac-prod/bibliographic/")
+            write_range_to_json(i, i + 100, "https://opac.nlai.ir/opac-prod/bibliographic/")
