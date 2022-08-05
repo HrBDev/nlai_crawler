@@ -53,7 +53,7 @@ def scrape(url):
     td = formcontent.find('td', attrs={"width": "100%"})
     rows = td.find_all('tr')
     item = {}
-    translatable = str.maketrans('', '', '\u200f\u202a\u202b\u202c\u202d\u202e')
+    translatable = str.maketrans('', '', '\u200c\u200f\u202a\u202b\u202c\u202d\u202e')
     for row in rows:
         row_list = row.find_all('td')
         key = row_list[0].text.translate(translatable)
