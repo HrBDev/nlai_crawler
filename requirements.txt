@@ -1,7 +1,4 @@
 requests
 beautifulsoup4
 lxml
-pymongo
-dnspython
-python-dotenv
 joblib
