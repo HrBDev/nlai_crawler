@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from joblib import Parallel, delayed
 
+
 def write_range_to_json(range_start, range_end, base_url):
     results = Parallel(n_jobs=8)(delayed(scrape)(f"{base_url}{k}") for k in range(range_start, range_end))
     results_as_dict = {}
