@@ -42,6 +42,6 @@ def scrape(url):
 
 
 if __name__ == '__main__':
-    for i in range(1, 7265830, 100):
+    for i in range(1, 8000000, 100):
         if not file_exists(f"./data/{i}-{i + 100}.json"):
             write_range_to_json(i, i + 100, "https://opac.nlai.ir/opac-prod/bibliographic/")
