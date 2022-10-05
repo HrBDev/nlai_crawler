@@ -8,7 +8,7 @@ from joblib import Parallel, delayed
 
 
 def write_range_to_json(range_start, range_end, base_url):
-    results = Parallel(n_jobs=24)(delayed(scrape)(f"{base_url}{k}") for k in range(range_start, range_end))
+    results = Parallel(n_jobs=36)(delayed(scrape)(f"{base_url}{k}") for k in range(range_start, range_end))
     results_as_dict = {}
     with open(f"./data/{range_start}-{range_end}.json", 'w', encoding='utf-8') as outfile:
         for j in range(len(results)):
