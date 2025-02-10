@@ -2,6 +2,8 @@ import json
 import logging
 import os
 
+from tqdm import tqdm
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -12,7 +14,6 @@ def remove_empty_json_objects(file_path):
             data = json.load(infile)
         with open(file_path, 'w', encoding='utf-8') as outfile:
             json.dump({k: v for k, v in data.items() if v}, outfile, indent=4, ensure_ascii=False)
-        logging.info(f"Processed file: {file_path}")
 
     except (json.JSONDecodeError, OSError) as e:
         logging.error(f"Error processing {file_path}: {e}")
@@ -23,5 +24,9 @@ def get_path_of_all_files_in_dir(directory):
 
 
 if __name__ == '__main__':
-    for path in get_path_of_all_files_in_dir("./data"):
+    files = get_path_of_all_files_in_dir("./data")
+
+    for path in tqdm(files, desc="Processing files"):
         remove_empty_json_objects(path)
+
+    print("All files have been processed.")
