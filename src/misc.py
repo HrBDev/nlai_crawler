@@ -1,23 +1,27 @@
 import json
+import logging
 import os
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 def remove_empty_json_objects(file_path):
-    with open(file_path, 'r', encoding='utf-8') as infile:
-        data = json.load(infile)
-        infile.close()
-    with open(file_path, 'w', encoding='utf-8') as outfile:
-        json.dump({k: v for k, v in data.items() if v}, outfile, indent=4, ensure_ascii=False)
-        outfile.close()
+    try:
+        with open(file_path, 'r', encoding='utf-8') as infile:
+            data = json.load(infile)
+        with open(file_path, 'w', encoding='utf-8') as outfile:
+            json.dump({k: v for k, v in data.items() if v}, outfile, indent=4, ensure_ascii=False)
+        logging.info(f"Processed file: {file_path}")
+
+    except (json.JSONDecodeError, OSError) as e:
+        logging.error(f"Error processing {file_path}: {e}")
 
 
-def get_path_of_all_files_in_dir():
-    return [f"./data/{f}" for f in os.listdir("./data")]
+def get_path_of_all_files_in_dir(directory):
+    return [os.path.join(directory, f) for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
 
 
 if __name__ == '__main__':
-    for path in get_path_of_all_files_in_dir():
-        try:
-            remove_empty_json_objects(path)
-        except:
-            pass
+    for path in get_path_of_all_files_in_dir("./data"):
+        remove_empty_json_objects(path)
