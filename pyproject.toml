@@ -1,0 +1,11 @@
+[project]
+name = "nlai-crawler"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "beautifulsoup4>=4.14.3",
+    "joblib>=1.5.3",
+    "lxml>=6.1.1",
+    "requests>=2.34.2",
+    "tqdm>=4.67.3",
+]
