@@ -1,18 +1,13 @@
-# -*- coding: utf-8 -*-
-import json
-import logging
 import os
-from os.path import exists as file_exists
-
-import requests
-from bs4 import BeautifulSoup
+import re
+import logging
+import json
+import argparse
 from joblib import Parallel, delayed
+import requests
 from requests.adapters import HTTPAdapter, Retry
+from bs4 import BeautifulSoup
 
-import misc
-from misc import find_keys
-
-# Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -59,16 +54,36 @@ def scrape(url):
             raise
 
 
+def find_last_completed_range(data_dir_path: str):
+    files = [f for f in os.listdir(data_dir_path) if f.endswith(".json")]
+    max_end = 0
+    for f in files:
+        match = re.match(r"(\d+)-(\d+)\.json", f)
+        if match:
+            _, end = map(int, match.groups())
+            if end > max_end:
+                max_end = end
+    return max_end
+
+
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Scrape bibliographic data")
+    parser.add_argument("--start", type=int, help="Optional start index for scraping")
+    args = parser.parse_args()
+
     data_dir = "./data"
     os.makedirs(data_dir, exist_ok=True)
-    for i in range(1, 11000000, 100):
+
+    if args.start:
+        start_index = args.start
+        logging.info(f"Starting from user-provided index {start_index}")
+    else:
+        start_index = find_last_completed_range(data_dir)
+        logging.info(f"Starting from last completed range {start_index}")
+
+    for i in range(start_index, 11000000, 100):
         file_path = f"{data_dir}/{i}-{i + 100}.json"
-        if not file_exists(file_path):
+        if not os.path.exists(file_path):
             write_range_to_json(i, i + 100, "https://opac.nlai.ir/opac-prod/bibliographic/")
         else:
-            logging.info(f"{file_path} exists skipping.")
-            with open(file_path, 'r', encoding='utf-8') as infile:
-                data = json.load(infile)
-                keys = find_keys(data)
-                missing_keys = misc.find_missing_numbers(i, i + 100, keys)
+            logging.info(f"{file_path} exists, skipping.")
