@@ -17,7 +17,6 @@ Dependencies are declared in `pyproject.toml` and locked in `uv.lock`:
 | `lxml`           | Parse HTML for Beautiful Soup           |
 | `requests`       | Fetch catalog pages with retries        |
 | `joblib`         | Run requests concurrently               |
-| `tqdm`           | Display progress in the cleanup utility |
 
 ## Setup
 
@@ -35,19 +34,19 @@ is not necessary.
 The entry point is `src/main.py`. Run it from the project root:
 
 ```sh
-uv run python src/main.py
+uv run python -m src.main
 ```
 
 To choose a starting record ID, for example 1:
 
 ```sh
-uv run python src/main.py --start 1
+uv run python -m src.main --start 1
 ```
 
 To view command-line options without starting a crawl:
 
 ```sh
-uv run python src/main.py --help
+uv run python -m src.main --help
 ```
 
 Without `--start`, the crawler starts at the greatest ending ID in existing
