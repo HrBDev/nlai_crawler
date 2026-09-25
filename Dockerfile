@@ -8,4 +8,6 @@ COPY . .
 
 RUN uv sync
 
-CMD [ "uv", "run", "./src/main.py" ]
+VOLUME ["/usr/app/data"]
+
+CMD [ "uv", "run", "python", "-m", "src.main" ]
